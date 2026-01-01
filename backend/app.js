@@ -4,6 +4,7 @@ const cors=require('cors');
 const morgon=require('morgan');
 const rateLimit=require('express-rate-limit');
 const mongosnatize=require('express-mongo-sanitize');
+const { mongo } = require('mongoose');
 const app=express();
 app.use(heLmet());
 app.use(cors({
@@ -18,5 +19,26 @@ const limiter=rateLimit({
     legacyHeaders:false,
 });
 app.use('/api',limiter);
+if(process.env.NODE_ENV==='development'){
+    app.use(morgon('dev'));
+    app.use(mongosnatize());
+}
+app.use(express.json({limit:'10kb'}));
+app.use((req,res,next)=>{
+    mongosnatize.sanitize   (req.body);
+    mongosnatize.sanitize(req.params);
+    const querycopy={...req.query};
+    mongosnatize.sanitize(querycopy);
+    req.query = mongoSanitize.sanitize(querycopy);
+    
+    next();
+});
+app.get('/',(req,res)=>{
+    res.status(200).json({
+        status:'success',
+        message:'Welcome to the API',
+    });
+});
+
 
 module.exports=app;
