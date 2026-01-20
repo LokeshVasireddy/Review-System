@@ -39,6 +39,9 @@ app.get('/',(req,res)=>{
         message:'Welcome to the API',
     });
 });
-
+app.use((req,res,next)=>{
+    next(new Error(`Can't find ${req.originalUrl} on this server!`));  
+});
+app.use(globalErrorHandler);
 
 module.exports=app;

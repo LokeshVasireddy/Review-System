@@ -9,6 +9,11 @@ const app=require("./app");
 // }).catch((err)=>{
 //     console.log(err);
 // })
+process.on('uncaughtException',err=>{
+    console.log('UNCAUGHT EXCEPTION!  Shutting down...');
+    console.log(err.name, err.message);
+    process.exit(1);
+});
 
 mongoose.connect(process.env.DATABASE)
 .then(() => console.log("Connected to local MongoDB"))
@@ -17,4 +22,11 @@ mongoose.connect(process.env.DATABASE)
 const port=process.env.PORT;
 app.listen(port,()=>{
     console.log("app running on port "+port);
-})
+});
+process.on('unhandledRejection',err=>{
+    console.log('UNHANDLED REJECTION!  Shutting down...');
+    console.log(err.name, err.message);
+    server.close(()=>{
+        process.exit(1);
+    });
+});
