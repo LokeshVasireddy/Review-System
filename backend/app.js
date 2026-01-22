@@ -1,16 +1,32 @@
+
+
 const express = require('express');
 const heLmet=  require('helmet');
 const cors=require('cors');
 const morgon=require('morgan');
 const rateLimit=require('express-rate-limit');
-const mongosnatize=require('express-mongo-sanitize');
+const mongoSanitize = require('express-mongo-sanitize');
+const globalErrorHandler=require('./controllers/errorController');
+const AppError=require('./utils/appError');
+const companyRouter=require('./routes/companyRoutes.js');
 const { mongo } = require('mongoose');
 const app=express();
+
+app.use((req, res, next) => {
+  Object.defineProperty(req, 'query', {
+    set() {
+      throw new Error('req.query is being overwritten HERE');
+    }
+  });
+  next();
+});
+
 app.use(heLmet());
 app.use(cors({
     origin: ["http://localhost:3000"],
     credentials: true,
 }));
+
 const limiter=rateLimit({
     max:10000,
     windowMs:60*60*1000,
@@ -21,18 +37,20 @@ const limiter=rateLimit({
 app.use('/api',limiter);
 if(process.env.NODE_ENV==='development'){
     app.use(morgon('dev'));
-    app.use(mongosnatize());
+    app.use(mongoSanitize());
 }
 app.use(express.json({limit:'10kb'}));
-app.use((req,res,next)=>{
-    mongosnatize.sanitize   (req.body);
-    mongosnatize.sanitize(req.params);
-    const querycopy={...req.query};
-    mongosnatize.sanitize(querycopy);
-    req.query = mongoSanitize.sanitize(querycopy);
-    
-    next();
+app.use((req, res, next) => {
+  mongoSanitize.sanitize(req.body);
+  mongoSanitize.sanitize(req.params);
+
+  req.sanitizedQuery = { ...req.query };
+  mongoSanitize.sanitize(req.sanitizedQuery);
+
+  next();
 });
+
+app.use('/api/v1/companies',companyRouter);
 app.get('/',(req,res)=>{
     res.status(200).json({
         status:'success',
