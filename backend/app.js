@@ -10,6 +10,7 @@ const globalErrorHandler=require('./controllers/errorController');
 const AppError=require('./utils/appError');
 const companyRouter=require('./routes/companyRoutes.js');
 const { mongo } = require('mongoose');
+const reviewRouter=require('./routes/reviewRoutes.js');
 const app=express();
 
 app.use((req, res, next) => {
@@ -51,6 +52,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/v1/companies',companyRouter);
+app.use('/api/v1/reviews',reviewRouter);
 app.get('/',(req,res)=>{
     res.status(200).json({
         status:'success',
