@@ -1,0 +1,103 @@
+COMPANY REVIEW SYSTEM — RESUME WORTHY FEATURES CHECKLIST
+
+--------------------------------------------------
+AUTHENTICATION & SECURITY
+--------------------------------------------------
+
+- User registration and login
+- JWT-based authentication
+- Password hashing (bcrypt)
+- Role-based access control (User / Admin / Company Owner)
+- Protected API routes using middleware
+- Input validation
+- Proper error handling and HTTP status codes
+
+--------------------------------------------------
+REVIEW MANAGEMENT SYSTEM
+--------------------------------------------------
+
+- Create, edit, delete reviews
+- Star rating system
+- Anonymous review option
+- Company owner replies to reviews
+- Review moderation workflow:
+    - pending
+    - approved
+    - rejected
+- Admin moderation dashboard
+- Report/flag review feature
+
+--------------------------------------------------
+SEARCH, SORTING & FILTERING
+--------------------------------------------------
+
+- Pagination for reviews
+- Sorting:
+    - newest
+    - highest rating
+    - most helpful
+- Filtering:
+    - by company
+    - by rating range
+    - by job role
+
+--------------------------------------------------
+HELPFUL VOTES SYSTEM
+--------------------------------------------------
+
+- Mark review as helpful
+- Prevent duplicate votes per user
+- Helpful vote count tracking
+
+--------------------------------------------------
+REDIS INTEGRATION (PERFORMANCE)
+--------------------------------------------------
+
+- Redis caching for frequently requested endpoints
+- Cache company reviews
+- Cache top companies list
+- Cache invalidation on review update/create
+- Rate limiting using Redis
+- Login attempt limiting
+- Redis counters for frequently updated metrics
+
+--------------------------------------------------
+DATABASE DESIGN
+--------------------------------------------------
+
+- Users collection/table
+- Companies collection/table
+- Reviews collection/table
+- Votes collection/table
+- Reports collection/table
+- Proper indexing for faster queries
+
+--------------------------------------------------
+REST API ARCHITECTURE
+--------------------------------------------------
+
+- POST /auth/login
+- POST /reviews
+- GET /companies/:id/reviews
+- PATCH /reviews/:id
+- DELETE /reviews/:id
+- Middleware-based structure
+- Centralized error handling
+
+--------------------------------------------------
+FRONTEND (IF FULLSTACK)
+--------------------------------------------------
+
+- Responsive UI
+- Form validation
+- Loading states
+- Error feedback
+
+--------------------------------------------------
+BONUS (OPTIONAL HIGH-VALUE)
+--------------------------------------------------
+
+- Bookmark/save companies
+- Soft delete reviews
+- API request logging
+- Rate limiting per user/IP

@@ -1,7 +1,8 @@
 const moongoose = require('mongoose');
 const { type } = require('os');
 const storySchema = new moongoose.Schema({
-    vibe:{String,
+    vibe:{
+        type:String,
     enum:['positive','negative','neutral'],
     required:[true,'Vibe is required'],
     },
@@ -27,11 +28,11 @@ const storySchema = new moongoose.Schema({
             return this.isAnonymous;
         },
         },
-    userType:{
-        enum:["individual customer","bank employee","bussiness customer","investor","other"],
-        required:[true,'User type is required'],
-    
-    },
+    userType: {
+    type: String,
+    enum: ["individual customer","bank employee","bussiness customer","investor","other"],
+    required: [true,'User type is required']
+},
     title:{
         type:String,
         required:[true,'Title is required'],
