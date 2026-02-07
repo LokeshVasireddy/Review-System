@@ -4,6 +4,8 @@ import "./globals.css";
 import NavWrapper from "@/components/Home/Navbar/NavWrapper";
 import { Toaster } from "sonner";
 import React from "react";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const font = Poppins({
   weight: ["100","200","300","400","500","600","700","800","900"],

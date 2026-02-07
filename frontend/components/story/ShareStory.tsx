@@ -8,9 +8,10 @@ import { handleRequest } from '../utils/apiRequest';
 import { BASE_API_URL } from '@/server';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { Briefcase, FileText, Heart, User } from 'lucide-react';
+import { Briefcase, FileText, Heart, Send, User } from 'lucide-react';
 import { Building2 } from 'lucide-react';
-
+import { LoadingButton } from '../utils/LoadingButton';
+import { toast } from 'sonner';
 
 const ShareStory = () => {
   // state variables
@@ -62,6 +63,7 @@ const ShareStory = () => {
 useEffect(() => {
   const fetchCompanies = async () => {
     const companyReq = async () => 
+        
       await axios.get(`${BASE_API_URL}/companies/all`);
     
     const result = await handleRequest(companyReq, setIsLoading);
@@ -76,7 +78,27 @@ useEffect(() => {
 //submit handler for our form
 const handleSubmit = async (e: React.FormEvent) => {    
     e.preventDefault();
+        const payLoad = {
+    vibe: formData.vibe,
+    companyName: formData.companyName,
+    isAnonymous: formData.isAnonymous,
+    userType: formData.userType,
+    title: formData.title,
+    story: formData.story,
+    ...(formData.isAnonymous ? {} : { name: formData.name }),
+    };
+//console.log(payLoad);
+console.log(typeof formData.companyName);
+console.log(formData.companyName);
+
+const shareStoryReq = async()=> axios.post(`${BASE_API_URL}/reviews/create`, payLoad,{withCredentials:true});
+
+const result = await handleRequest(shareStoryReq, setIsLoading);
+if(result?.data.status==="success"){
+    toast.success("Story shared successfully!");
+  router.push("/");  
 }
+};
   return (
     <div className="min-h-screen mt-10 bg-gray-100 py-10">
       <div className="max-w-3xl mx-auto bg-white p-6 rounded-md shadow-md">
@@ -112,9 +134,15 @@ const handleSubmit = async (e: React.FormEvent) => {
                 value={companyOptions.find(
                 (opt) => opt.value === formData.companyName
                 )}
-                onChange={(selected) =>
-                setFormData({ ...formData, companyName: selected?.value || "" })
-                }
+                onChange={(selected) => {
+                const option = selected as { value: string; label: string } | null;
+
+                setFormData({
+                    ...formData,
+                    companyName: option?.value ?? "",
+                });
+                }}
+
                 placeholder="Select a company"
                 isSearchable
             />
@@ -186,7 +214,35 @@ const handleSubmit = async (e: React.FormEvent) => {
                     className="w-full border px-3 py-2 rounded"
                 />
                 </div>
-                
+                {/* description/story */}
+                <div>
+                <label className="block font-medium mb-1 text-gray-700">
+                    <FileText className="inline w-4 h-4 mr-2" />
+                    Story
+                </label>
+                <textarea
+                    name="story"
+                    value={formData.story}
+                    onChange={handleChange}
+                    placeholder="Describe your experience..."
+                    rows={6}
+                    required
+                    className="w-full border px-3 py-2 rounded resize-y"
+                />
+                </div>
+                {/* sumit button */}
+                <div className="text-right">
+                <LoadingButton
+                    isLoading={isLoading}
+                    type="submit"
+                    className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded disabled:opacity-50"
+                >
+                    <span className="inline-flex items-center">
+                    <Send className="w-4 h-4 mr-2" />
+                    Share Story
+                    </span>
+                </LoadingButton>
+                </div>
         </form>
       </div>
     </div>

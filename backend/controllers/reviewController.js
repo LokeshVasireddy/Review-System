@@ -64,16 +64,16 @@ exports.createStory=catchAsync(async(req,res,next)=>{
         title,
         story,
     }=req.body;
-    if(isAnonymous && !anonymousId){
-        return next(new AppError('Anonymous ID is required for anonymous reviews',400));
-    }    
+    // if(isAnonymous && !anonymousId){
+    //     return next(new AppError('Anonymous ID is required for anonymous reviews',400));
+    // }    
     const company=await Company.findOne({name:companyName.trim()});
     if(!company){
         return next(new AppError('Company not found',400));
     }
     const newStory=await Story.create({
         vibe,
-        companyName:company.trim(),
+        companyName:company.name,
         isAnonymous,
         name: isAnonymous ? undefined : name,
         anonymousId: isAnonymous ? generateAnonymousId() : undefined,
