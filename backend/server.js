@@ -4,11 +4,11 @@ dotenv.config({path:"./config.env"});
 const app=require("./app");
 // const DB=process.env.DATABASE.replace("<PASSWORD>",process.env.DATABASE_PASSWORD);
 // const DB=process.env.DB_URL;
-mongoose.connect(DB).then(()=>{
-    console.log("DB connection successful");
-}).catch((err)=>{
-    console.log(err);
-})
+// mongoose.connect(DB).then(()=>{
+//     console.log("DB connection successful");
+// }).catch((err)=>{
+//     console.log(err);
+// })
 process.on('uncaughtException',err=>{
     console.log('UNCAUGHT EXCEPTION!  Shutting down...');
     console.log(err.name, err.message);
