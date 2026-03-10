@@ -93,9 +93,9 @@ FRONTEND (IF FULLSTACK)
 - Loading states
 - Error feedback
 
---------------------------------------------------
+
+
 BONUS (OPTIONAL HIGH-VALUE)
---------------------------------------------------
 
 - Bookmark/save companies
 - Soft delete reviews
